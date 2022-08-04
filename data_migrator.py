@@ -25,8 +25,8 @@ SOFTWARE.
 import os
 import sqlite3
 
-from pandas import DataFrame
 import pandas
+from pandas import DataFrame
 
 
 def format_number(value: str) -> int:
