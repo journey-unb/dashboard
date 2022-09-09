@@ -102,4 +102,6 @@ for file in os.listdir("data/"):
     conn.commit()
 
 cursor.close()
-conn.close()
+
+# Conectar-se com o banco de dados e carregar o dataframe principal
+df = pandas.read_sql("SELECT * FROM data", conn)
