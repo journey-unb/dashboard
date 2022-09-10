@@ -12,4 +12,3 @@ filtered_df = filter_columns(df, "year", "region", "median_age")
 fig = px.area(filtered_df, facet_col="region", facet_col_wrap=3, x="year", y="median_age", color="region", labels=labels, markers=True)
 
 fig.update_layout(config)
-fig.show()

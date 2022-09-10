@@ -14,4 +14,3 @@ filtered_df = filter_columns(df, "urban_population", "urban_population_percentag
 fig = px.bar(filtered_df, x="region", y="urban_population", color="region", animation_frame="year", animation_group="region", hover_data=hover_data, labels=labels)
 
 fig.update_layout(config)
-fig.show()

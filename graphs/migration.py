@@ -32,4 +32,3 @@ fig.update_layout(
 )
 
 fig.update_layout(config)
-fig.show()
