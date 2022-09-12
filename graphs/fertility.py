@@ -28,11 +28,11 @@ for key, value in average.items():
     rows.append([key, "all", value / 6])
 
 changed_df = DataFrame(rows, columns=list(filtered_df.columns))
-fig = px.line(changed_df, x="year", y="fertility_rate", color="region", line_shape="spline", labels=labels, markers=True)
+fertility_graph = px.line(changed_df, x="year", y="fertility_rate", color="region", line_shape="linear", labels=labels, markers=True)
 
 # Aqui adicionamos as funções de selecionar o intervalo
 # de tempo através de botões e um "controle deslizante".
-fig.update_layout(
+fertility_graph.update_layout(
     xaxis=dict(
         rangeselector=dict(
             buttons=[
@@ -49,4 +49,4 @@ fig.update_layout(
     )
 )
 
-fig.update_layout(config)
+fertility_graph.update_layout(config)

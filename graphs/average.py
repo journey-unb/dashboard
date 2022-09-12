@@ -9,6 +9,6 @@ labels = {"median_age": "Média das idades", "region": "Região", "year": "Ano"}
 # `facet_col`: informação que vai aparecer em cada coluna.
 # `facet_col_wrap`: quantas colunas vão aparecer por linha.
 filtered_df = filter_columns(df, "year", "region", "median_age")
-fig = px.area(filtered_df, facet_col="region", facet_col_wrap=3, x="year", y="median_age", color="region", labels=labels, markers=True)
+average_graph = px.area(filtered_df, facet_col="region", facet_col_wrap=3, x="year", y="median_age", color="region", labels=labels, markers=True)
 
-fig.update_layout(config)
+average_graph.update_layout(config)

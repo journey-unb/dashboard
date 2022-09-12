@@ -10,11 +10,11 @@ labels = {"year": "Ano", "net_migrants": "Migrantes", "region": "Região"}
 # Alguns itens básicos foram alterados, como a representação
 # das "etiquetas" de ano, imigrantes e região.
 filtered_df = filter_columns(df, "year", "net_migrants", "region")
-fig = px.line(filtered_df, x="year", y="net_migrants", color="region", line_shape="spline", labels=labels, markers=True)
+migration_graph = px.line(filtered_df, x="year", y="net_migrants", color="region", line_shape="linear", labels=labels, markers=True)
 
 # Aqui adicionamos as funções de selecionar o intervalo
 # de tempo através de botões e um "controle deslizante".
-fig.update_layout(
+migration_graph.update_layout(
     xaxis=dict(
         rangeselector=dict(
             buttons=[
@@ -31,4 +31,4 @@ fig.update_layout(
     )
 )
 
-fig.update_layout(config)
+migration_graph.update_layout(config)

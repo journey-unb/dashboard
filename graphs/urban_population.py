@@ -11,6 +11,6 @@ hover_data = ["urban_population_percentage", "urban_population"]
 # `animatiou_group`: o que vai ser animado.
 # `hover_data`: informações que vão aparecer ao passar o mouse em cima das barras.
 filtered_df = filter_columns(df, "urban_population", "urban_population_percentage", "year", "region")
-fig = px.bar(filtered_df, x="region", y="urban_population", color="region", animation_frame="year", animation_group="region", hover_data=hover_data, labels=labels)
+urban_population_graph = px.bar(filtered_df, x="region", y="urban_population", color="region", animation_frame="year", animation_group="region", hover_data=hover_data, labels=labels)
 
-fig.update_layout(config)
+urban_population_graph.update_layout(config)
