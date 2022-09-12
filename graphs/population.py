@@ -24,5 +24,5 @@ if not valid_years:
 else:
   filtered_year = filter_values(filtered_df, "year", *valid_years)
 
-fig = px.pie(filtered_year, values="population", names="region", labels=labels)
-fig.update_layout(title_text=f'Percentual populacional por continente de {", ".join([str(year) for year in valid_years])}', title_x=0.5)
+population_graph = px.pie(filtered_year, values="population", names="region", labels=labels)
+population_graph.update_layout(title_text=f'Percentual populacional por continente de {", ".join([str(year) for year in valid_years])}', title_x=0.5)
