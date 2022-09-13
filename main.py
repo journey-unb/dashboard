@@ -24,7 +24,7 @@ SOFTWARE.
 
 from dash import Dash, dcc, html # type: ignore
 
-from graphs import migration
+from graphs import migration, population
 
 
 app = Dash(__name__)
@@ -39,6 +39,14 @@ app.layout = html.Div(children=[
             figure=migration.chart # type: ignore
         )
     ]),
+
+    # População
+    html.Div(children=[ # type: ignore
+        dcc.Graph(
+            id="population", # type: ignore
+            figure=population.chart # type: ignore
+        )
+    ])
 ])
 
 

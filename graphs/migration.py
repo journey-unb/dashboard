@@ -24,7 +24,6 @@ SOFTWARE.
 
 import plotly.express as px # type: ignore
 
-
 from data_migrator import df
 from utils import filter_columns
 
