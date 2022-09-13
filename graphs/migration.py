@@ -1,34 +1,50 @@
-import plotly.express as px
-from functions import *
+"""
+MIT License
+
+Copyright (c) 2022 UnB
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+import plotly.express as px # type: ignore
+
+
 from data_migrator import df
+from utils import filter_columns
+
 
 # Aqui definimos as configurações de layout do gráfico.
-config = {"title": {"text": "Taxa de Migração (1955 - 2020)"}}
+config = {"title": {"text": "Taxa de Migração (1955-2020)"}}
 labels = {"year": "Ano", "net_migrants": "Migrantes", "region": "Região"}
 
 # A criação do gráfico utiliza o modo "linear" do Plotly.
 # Alguns itens básicos foram alterados, como a representação
 # das "etiquetas" de ano, imigrantes e região.
 filtered_df = filter_columns(df, "year", "net_migrants", "region")
-migration_graph = px.line(filtered_df, x="year", y="net_migrants", color="region", line_shape="linear", labels=labels, markers=True)
-
-# Aqui adicionamos as funções de selecionar o intervalo
-# de tempo através de botões e um "controle deslizante".
-migration_graph.update_layout(
-    xaxis=dict(
-        rangeselector=dict(
-            buttons=[
-                dict(count=1, label="1y", step="year", stepmode="backward"),
-                dict(count=5, label="5y", step="year", stepmode="backward"),
-                dict(count=10, label="10y", step="year", stepmode="backward"),
-                dict(count=20, label="20y", step="year", stepmode="backward"),
-                dict(count=50, label = "50y", step = "year", stepmode = "backward"),
-                dict(step="all"),
-            ],
-        ),
-        rangeslider=dict(visible=True),
-        type="date",
-    )
+chart = px.line( # type: ignore
+    filtered_df,
+    x="year",
+    y="net_migrants",
+    color="region",
+    line_shape="linear",
+    labels=labels,
+    markers=True,
 )
 
-migration_graph.update_layout(config)
+chart.update_layout(config) # type: ignore
