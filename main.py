@@ -1,26 +1,78 @@
-from dash import Dash, dcc, html
+"""
+MIT License
 
-# Aqui atualizamos a database
-import data_migrator
+Copyright (c) 2022 UnB
 
-# Aqui importamos os gráficos
-from graphs.average import average_graph
-from graphs.fertility import fertility_graph
-from graphs.migration import migration_graph
-from graphs.population import population_graph
-from graphs.urban_population import urban_population_graph
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+"""
+
+from dash import Dash, dcc, html # type: ignore
+
+from graphs import migration, population, fertility, average, urban_population
+
 
 app = Dash(__name__)
 
-app.layout = html.Div([
-    html.H1('População em nível continental'),
-    html.Div([
-        html.H2('Taxa de Migração'),
+app.layout = html.Div(children=[
+    html.H1("População em Nível Continental"),
+
+    # Taxa de Migração
+    html.Div(children=[ # type: ignore
         dcc.Graph(
-        id='migration-graph',
-        figure = migration_graph
-    )
-    ])
+            id="migration-rate", # type: ignore
+            figure=migration.chart # type: ignore
+        )
+    ]),
+
+    # População
+    html.Div(children=[ # type: ignore
+        dcc.Graph(
+            id="population", # type: ignore
+            figure=population.chart # type: ignore
+        )
+    ]),
+
+    # Taxa de Fertilidade
+    html.Div(children=[ # type: ignore
+        dcc.Graph(
+            id="fertility-rate", # type: ignore
+            figure=fertility.chart # type: ignore
+        )
+    ]),
+
+    # Média de Idades
+    html.Div(children=[ # type: ignore
+        dcc.Graph(
+            id="average-age", # type: ignore
+            figure=average.chart # type: ignore
+        )
+    ]),
+
+    # População Urbana
+    html.Div(children=[
+        dcc.Graph(
+            id="urban-population", # type: ignore
+            figure=urban_population.chart # type: ignore
+        )
+    ]),
 ])
 
-app.run_server(debug=True)
+
+if __name__ == "__main__":
+    app.run_server(debug=True) # type: ignore
