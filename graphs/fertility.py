@@ -29,7 +29,7 @@ import plotly.express as px # type: ignore
 from pandas import DataFrame
 
 from data_migrator import df
-from utils import  filter_columns
+from utils import filter_columns, filter_fertility
 
 # Aqui definimos as configurações de layout do gráfico.
 config = {"title": {"text": "Taxa de Fertilidade (1955-2020)", "x": 0.5}}
@@ -43,6 +43,7 @@ labels = {
 # Alguns itens básicos foram alterados, como a representação
 # das "etiquetas" de ano, imigrantes e região.
 filtered_df = filter_columns(df, "year", "region", "fertility_rate")
+filter_fertility(filtered_df)
 
 rows = filtered_df.values.tolist() # type: ignore
 average: DefaultDict[str, int] = defaultdict(int)

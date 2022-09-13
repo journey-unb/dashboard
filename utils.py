@@ -68,3 +68,11 @@ def filter_values(df: DataFrame, column: str, *values: Any) -> DataFrame:
             new_df.append(row)
   
     return DataFrame(new_df, columns=columns)
+
+def filter_fertility(df: DataFrame):
+    fertility_value = filter_columns(df, "fertility_rate").values.tolist()
+    fertility_list = []
+    for values_list in fertility_value:
+       value = values_list[0]
+       print(value)
+    #print(fertility_values)
