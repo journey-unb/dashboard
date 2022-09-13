@@ -33,7 +33,11 @@ from utils import  filter_columns
 
 # Aqui definimos as configurações de layout do gráfico.
 config = {"title": {"text": "Taxa de Fertilidade (1955-2020)", "x": 0.5}}
-labels = {"year": "Ano", "fertility_rate": "Taxa de Fertilidade", "region": "Região"}
+labels = {
+    "year": "Ano",
+    "fertility_rate": "Taxa de Fertilidade",
+    "region": "Região",
+}
 
 # A criação do gráfico utiliza o modo "linear" do Plotly.
 # Alguns itens básicos foram alterados, como a representação

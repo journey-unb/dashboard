@@ -54,7 +54,8 @@ chart = px.pie( # type: ignore
   filtered_year,
   values="population",
   names="region",
-  labels=labels
+  labels=labels,
 )
 
+# TODO: Utilizar títulos dinâmicos e seguir a PEP-8.
 chart.update_layout(title_text=f'Percentual populacional por continente de {", ".join([str(year) for year in valid_years])}', title_x=0.5) # type: ignore
