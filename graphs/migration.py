@@ -29,7 +29,7 @@ from utils import filter_columns
 
 
 # Aqui definimos as configurações de layout do gráfico.
-config = {"title": {"text": "Taxa de Migração (1955-2020)"}}
+config = {"title": {"text": "Taxa de Migração (1955-2020)", "x": 0.5}}
 labels = {"year": "Ano", "net_migrants": "Migrantes", "region": "Região"}
 
 # A criação do gráfico utiliza o modo "linear" do Plotly.
