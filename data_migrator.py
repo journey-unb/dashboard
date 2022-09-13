@@ -59,10 +59,15 @@ def initialize_database() -> None:
         "region",
     ]
 
-    conn = sqlite3.connect("data.db")
-    cursor = conn.cursor()
-
     encoding = "unicode_escape"
+    filename = "data.db"
+
+    # Caso já exista um arquivo `data.db`, será excluido.
+    if os.path.isfile(filename):
+        os.remove(filename)
+
+    conn = sqlite3.connect(filename)
+    cursor = conn.cursor()
 
     # Fazer formatação de strings dentro de uma query SQL é uma má
     # prática pois é inseguro (permite SQL Injection). Como neste caso
