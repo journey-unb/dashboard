@@ -23,10 +23,21 @@ SOFTWARE.
 """
 
 import plotly.express as px # type: ignore
+from pandas import DataFrame
 
 from data_migrator import df
 from utils import filter_columns, filter_values
 
+def create_chart(df: DataFrame, labels: dict, config: dict = {}): # type: ignore
+  chart = px.pie( # type: ignore
+    df,
+    values="population",
+    names="region",
+    labels=labels,
+  )
+
+  chart.update_layout(config)
+  return chart
 
 # Aqui definimos as configurações de layout do gráfico.
 labels = {"population": "População", "region": "Região", "year": "Ano"}
@@ -50,12 +61,8 @@ if not valid_years:
 else:
   filtered_year = filter_values(filtered_df, "year", *valid_years)
 
-chart = px.pie( # type: ignore
-  filtered_year,
-  values="population",
-  names="region",
-  labels=labels,
-)
+# Aqui criamos o gráfico utilizando a função `create_chart`
+chart = create_chart(filtered_year, labels)
 
 # TODO: Utilizar títulos dinâmicos e seguir a PEP-8.
 chart.update_layout(title_text=f'Percentual populacional por continente de {", ".join([str(year) for year in valid_years])}', title_x=0.5) # type: ignore

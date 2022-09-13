@@ -31,6 +31,19 @@ from pandas import DataFrame
 from data_migrator import df
 from utils import  filter_columns
 
+def create_chart(df: DataFrame, labels: dict, config: dict = {}): # type: ignore
+    chart = px.line( # type: ignore
+        df,
+        x="year",
+        y="fertility_rate",
+        color="region",
+        labels=labels,
+        markers=True,
+    )
+
+    chart.update_layout(config)
+    return chart
+
 # Aqui definimos as configurações de layout do gráfico.
 config = {"title": {"text": "Taxa de Fertilidade (1955-2020)", "x": 0.5}}
 labels = {
@@ -60,13 +73,6 @@ for key, value in average.items():
     rows.append([key, "all", value / 6])
 
 changed_df = DataFrame(rows, columns=list(filtered_df.columns))
-chart = px.line( # type: ignore
-    changed_df,
-    x="year",
-    y="fertility_rate",
-    color="region",
-    labels=labels,
-    markers=True,
-)
 
-chart.update_layout(config) # type: ignore
+# Aqui criamos o gráfico utilizando a função `create_chart`
+chart = create_chart(changed_df, labels, config)

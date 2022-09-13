@@ -23,9 +23,26 @@ SOFTWARE.
 """
 
 import plotly.express as px # type: ignore
+from pandas import DataFrame
 
 from data_migrator import df
 from utils import filter_columns
+
+def create_chart(df: DataFrame, labels: dict, config: dict = {}): # type: ignore
+    hover_data = ["urban_population_percentage", "urban_population"]
+    chart = px.bar( # type: ignore
+        df,
+        x="region",
+        y="urban_population",
+        color="region",
+        animation_frame="year",
+        animation_group="region",
+        hover_data=hover_data,
+        labels=labels,
+    )
+
+    chart.update_layout(config)
+    return chart
 
 # Aqui definimos as configurações de layout do gráfico.
 config = {"title": {"text": "População Urbana (1955-2020)", "x": 0.5}}
@@ -35,7 +52,6 @@ labels = {
     "year": "Ano",
     "urban_population_percentage": "% de população urbana",
 }
-hover_data = ["urban_population_percentage", "urban_population"]
 
 # `animation_frame`: critério para animação.
 # `animatiou_group`: o que vai ser animado.
@@ -48,15 +64,6 @@ filtered_df = filter_columns(
     "year",
     "region",
 )
-chart = px.bar( # type: ignore
-    filtered_df,
-    x="region",
-    y="urban_population",
-    color="region",
-    animation_frame="year",
-    animation_group="region",
-    hover_data=hover_data,
-    labels=labels,
-)
 
-chart.update_layout(config) # type: ignore
+# Aqui criamos o gráfico utilizando a função `create_chart`
+chart = create_chart(filtered_df, labels, config)
