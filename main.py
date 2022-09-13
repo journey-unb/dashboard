@@ -24,7 +24,7 @@ SOFTWARE.
 
 from dash import Dash, dcc, html # type: ignore
 
-from graphs import migration, population, fertility, average
+from graphs import migration, population, fertility, average, urban_population
 
 
 app = Dash(__name__)
@@ -61,6 +61,14 @@ app.layout = html.Div(children=[
         dcc.Graph(
             id="average-age", # type: ignore
             figure=average.chart # type: ignore
+        )
+    ]),
+
+    # População Urbana
+    html.Div(children=[
+        dcc.Graph(
+            id="urban-population", # type: ignore
+            figure=urban_population.chart # type: ignore
         )
     ]),
 ])
