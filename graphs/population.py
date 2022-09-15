@@ -28,7 +28,7 @@ from pandas import DataFrame
 from data_migrator import df
 from utils import filter_columns, filter_values
 
-def create_chart(df: DataFrame, labels: dict, config: dict = {}): # type: ignore
+def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
   chart = px.pie( # type: ignore
     df,
     values="population",
