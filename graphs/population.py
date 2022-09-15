@@ -28,6 +28,13 @@ from pandas import DataFrame
 from data_migrator import df
 from utils import filter_columns, filter_values
 
+years: int = []
+
+for row in df.values.tolist():
+  years.append(row[0])
+
+years.sort()
+
 def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
   chart = px.pie( # type: ignore
     df,
@@ -39,30 +46,14 @@ def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] =
   chart.update_layout(config)
   return chart
 
+current_year: int = 2000
+
 # Aqui definimos as configurações de layout do gráfico.
 labels = {"population": "População", "region": "Região", "year": "Ano"}
+config = {"title": { "text": f"Percentual populacional por continente de {current_year}", "x":0.5}}
 
-filtered_df = filter_columns(df, "year", "region", "population")
-valid_years: list[str | int] = []
-
-# Aqui inserimos, de maneira provisória, um sistema para escolha
-# dos anos a ser mostrado. Na próxima etapa do trabalho, utilizaremos
-# a função "Range Slider" do Dash.
-for year in input("Insira o ano desejado:").split():
-  if year.isnumeric():
-    valid_years.append(int(year))
-
-# Caso não insira um ano válido, será mostrado a população de todos os anos.
-# Caso contrário, utilizaremos o filtro de valores para mostrar os dados
-# do ano específico.
-if not valid_years:
-  filtered_year = filtered_df
-  valid_years.append("todos os anos")
-else:
-  filtered_year = filter_values(filtered_df, "year", *valid_years)
+filtered_columns = filter_columns(df, "year", "region", "population")
+filtered_df = filter_values(df, "year", current_year)
 
 # Aqui criamos o gráfico utilizando a função `create_chart`
-chart = create_chart(filtered_year, labels)
-
-# TODO: Utilizar títulos dinâmicos e seguir a PEP-8.
-chart.update_layout(title_text=f'Percentual populacional por continente de {", ".join([str(year) for year in valid_years])}', title_x=0.5) # type: ignore
+chart = create_chart(filtered_df, labels, config)
