@@ -60,14 +60,18 @@ for row in rows:
 for key, value in average.items():
     rows.append([key, "all", value / 6])
 
-changed_df = DataFrame(rows, columns=list(filtered_df.columns))
-chart = px.line( # type: ignore
-    changed_df,
-    x="year",
-    y="fertility_rate",
-    color="region",
-    labels=labels,
-    markers=True,
-)
+def create_chart(changed_df: DataFrame, labels: dict, config: dict = {}):
+    changed_df = DataFrame(rows, columns=list(filtered_df.columns))
+    chart = px.line( # type: ignore
+        changed_df,
+        x="year",
+        y="fertility_rate",
+        color="region",
+        labels=labels,
+        markers=True,
+    )
+    chart.update_layout(config) # type: ignore
+    return chart
 
-chart.update_layout(config) # type: ignore
+
+chart = create_chart(filtered_df, labels, config)

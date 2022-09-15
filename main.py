@@ -23,8 +23,13 @@ SOFTWARE.
 """
 
 from dash import Dash, dcc, html # type: ignore
+from dash.dependencies import Input, Output # type: ignore
+import plotly.express as px # type: ignore
 
 from graphs import migration, population, fertility, average, urban_population
+
+from data_migrator import df
+from utils import filter_values
 
 
 app = Dash(__name__)
@@ -53,6 +58,16 @@ app.layout = html.Div(children=[
         dcc.Graph(
             id="fertility-rate", # type: ignore
             figure=fertility.chart # type: ignore
+        ),
+         dcc.RangeSlider(
+            id="fertility-range-slider",
+            step=1,
+            min = 1955,
+            max = 2020,
+            value=[1955, 2020],
+            pushable=1,
+            marks=None,
+            tooltip={"placement": "bottom", "always_visible": True}
         )
     ]),
 
@@ -72,6 +87,16 @@ app.layout = html.Div(children=[
         )
     ]),
 ])
+@app.callback(
+    Output(component_id="fertility-rate", component_property="figure"),
+    Input(component_id="fertility-range-slider", component_property="value")
+)
+
+def update_fertility_rate(input_value: list[int]): # type: ignore
+    new_df = filter_values(df, "year", *list(range(*input_value)))
+    chart = fertility.create_chart(new_df, fertility.labels, fertility.config)
+    
+    return chart
 
 
 if __name__ == "__main__":
