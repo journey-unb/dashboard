@@ -69,14 +69,6 @@ def filter_values(df: DataFrame, column: str, *values: Any) -> DataFrame:
   
     return DataFrame(new_df, columns=columns)
 
-def closest_value(values: list[int], number: int) -> int:
-  aux: list[int] = []
-
-  for value in values:
-    aux.append(abs(number - value))
-    
-  return values[aux.index(min(aux))]
-  
 def get_specific_continent(df: DataFrame, *continents: Any) -> DataFrame:
     """
     Esta função filtra as linhas do dataframe e retorna apenas os valores
