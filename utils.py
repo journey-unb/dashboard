@@ -76,3 +76,20 @@ def closest_value(values: list[int], number: int) -> int:
     aux.append(abs(number - value))
     
   return values[aux.index(min(aux))]
+  
+def get_specific_continent(df: DataFrame, *continents: Any) -> DataFrame:
+    """
+    Esta função filtra as linhas do dataframe e retorna apenas os valores
+    específicos do continente escolhido. O diferencial é a utilização do
+    filtro de forma única através da sua posição na lista.
+    """
+    rows = df.values.tolist() # type: ignore
+    columns: list[str] = list(df.columns)
+
+    new_df: list[list[str | int]] = []
+
+    for row in rows:
+        if row[1] in continents:
+            new_df.append(row)
+    
+    return DataFrame(new_df, columns=columns)
