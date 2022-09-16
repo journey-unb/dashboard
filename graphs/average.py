@@ -32,13 +32,14 @@ from utils import filter_columns
 config = {"title": {"text": "Média de Idades (1955-2020)", "x": 0.5}}
 labels = {"median_age": "Média das idades", "region": "Região", "year": "Ano"}
 
+#Função responsável por fazer a filtragem por continentes. 
 def retornar_lista(df):
     df_list = df.values.tolist()
     colunas = df.columns
     continente_escolhido = []
 
     for lista in df_list:
-        if 'africa' == lista[1]:
+        if 'africa' == lista[1]: # O Botão será responsavel por mudar esse parametro, criando assim um novo gráfico ao escolher um continente diferente.
             continente_escolhido.append(lista)
     
     return DataFrame(columns = colunas, data = continente_escolhido)
