@@ -23,9 +23,25 @@ SOFTWARE.
 """
 
 import plotly.express as px # type: ignore
+from pandas import DataFrame
 
 from data_migrator import df
 from utils import filter_columns
+
+def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
+    chart = px.area( # type: ignore
+        filtered_df,
+        facet_col="region",
+        facet_col_wrap=3,
+        x="year",
+        y="median_age",
+        color="region",
+        labels=labels,
+        markers=True,
+    )
+
+    chart.update_layout(config)
+    return chart
 
 # Aqui definimos as configurações de layout do gráfico.
 config = {"title": {"text": "Média de Idades (1955-2020)", "x": 0.5}}
@@ -34,15 +50,6 @@ labels = {"median_age": "Média das idades", "region": "Região", "year": "Ano"}
 # `facet_col`: informação que vai aparecer em cada coluna.
 # `facet_col_wrap`: quantas colunas vão aparecer por linha.
 filtered_df = filter_columns(df, "year", "region", "median_age")
-chart = px.area( # type: ignore
-    filtered_df,
-    facet_col="region",
-    facet_col_wrap=3,
-    x="year",
-    y="median_age",
-    color="region",
-    labels=labels,
-    markers=True,
-)
 
-chart.update_layout(config) # type: ignore
+# Aqui criamos o gráfico utilizando a função `create_chart`
+chart = create_chart(filtered_df, labels, config)
