@@ -23,26 +23,29 @@ SOFTWARE.
 """
 
 import plotly.express as px # type: ignore
-
+from pandas import DataFrame
 from data_migrator import df
 from utils import filter_columns
+
 
 # Aqui definimos as configurações de layout do gráfico.
 config = {"title": {"text": "Média de Idades (1955-2020)", "x": 0.5}}
 labels = {"median_age": "Média das idades", "region": "Região", "year": "Ano"}
 
-# `facet_col`: informação que vai aparecer em cada coluna.
-# `facet_col_wrap`: quantas colunas vão aparecer por linha.
-filtered_df = filter_columns(df, "year", "region", "median_age")
-chart = px.area( # type: ignore
-    filtered_df,
-    facet_col="region",
-    facet_col_wrap=3,
-    x="year",
-    y="median_age",
-    color="region",
-    labels=labels,
-    markers=True,
-)
+def retornar_lista(df):
+    df_list = df.values.tolist()
+    colunas = df.columns
+    continente_escolhido = []
 
-chart.update_layout(config) # type: ignore
+    for lista in df_list:
+        if 'africa' == lista[1]:
+            continente_escolhido.append(lista)
+    
+    return DataFrame(columns = colunas, data = continente_escolhido)
+
+filtered_df = filter_columns(df, "year", "region", "median_age")
+
+df = retornar_lista(filtered_df)
+chart = px.area(df, x="year", y="median_age", color="region", labels=labels, markers=True)
+
+chart.update_layout(config)
