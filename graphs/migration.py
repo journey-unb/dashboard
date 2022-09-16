@@ -58,4 +58,4 @@ def create_chart(
 
 # Aqui criamos o gráfico utilizando a função `create_chart`.
 filtered_df = filter_columns(df, "year", "net_migrants", "region")
-chart = create_chart(filtered_df, labels, config)
+chart = create_chart(filtered_df)
