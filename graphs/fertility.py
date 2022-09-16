@@ -56,7 +56,6 @@ labels = {
 # Alguns itens básicos foram alterados, como a representação
 # das "etiquetas" de ano, imigrantes e região.
 filtered_df = filter_columns(df, "year", "region", "fertility_rate")
-filter_fertility(filtered_df)
 
 rows = filtered_df.values.tolist() # type: ignore
 average: DefaultDict[str, int] = defaultdict(int)
@@ -72,7 +71,6 @@ for row in rows:
 # existem 6 regiões.
 for key, value in average.items():
     rows.append([key, "all", value / 6])
-
 
 def create_chart(changed_df: DataFrame, labels: dict, config: dict = {}):
     changed_df = DataFrame(rows, columns=list(filtered_df.columns))
