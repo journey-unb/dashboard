@@ -22,7 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from typing import Any
+
 import plotly.express as px # type: ignore
+from plotly.graph_objects import Figure # type: ignore
+from pandas import DataFrame
 
 from data_migrator import df
 from utils import filter_columns
@@ -32,18 +36,26 @@ from utils import filter_columns
 config = {"title": {"text": "Taxa de Migração (1955-2020)", "x": 0.5}}
 labels = {"year": "Ano", "net_migrants": "Migrantes", "region": "Região"}
 
-# A criação do gráfico utiliza o modo "linear" do Plotly.
-# Alguns itens básicos foram alterados, como a representação
-# das "etiquetas" de ano, imigrantes e região.
-filtered_df = filter_columns(df, "year", "net_migrants", "region")
-chart = px.line( # type: ignore
-    filtered_df,
-    x="year",
-    y="net_migrants",
-    color="region",
-    line_shape="linear",
-    labels=labels,
-    markers=True,
-)
 
-chart.update_layout(config) # type: ignore
+def create_chart(
+    df: DataFrame,
+    labels: dict[str, str] = labels,
+    config: dict[str, Any] = config,
+) -> Figure:
+    chart = px.line( # type: ignore
+        df,
+        x="year",
+        y="net_migrants",
+        color="region",
+        line_shape="linear",
+        labels=labels,
+        markers=True,
+    )
+
+    chart.update_layout(config) # type: ignore
+    return chart
+
+
+# Aqui criamos o gráfico utilizando a função `create_chart`.
+filtered_df = filter_columns(df, "year", "net_migrants", "region")
+chart = create_chart(filtered_df)

@@ -29,7 +29,20 @@ import plotly.express as px # type: ignore
 from pandas import DataFrame
 
 from data_migrator import df
-from utils import  filter_columns
+from utils import filter_columns, filter_fertility
+
+def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
+    chart = px.line( # type: ignore
+        df,
+        x="year",
+        y="fertility_rate",
+        color="region",
+        labels=labels,
+        markers=True,
+    )
+
+    chart.update_layout(config)
+    return chart
 
 # Aqui definimos as configurações de layout do gráfico.
 config = {"title": {"text": "Taxa de Fertilidade (1955-2020)", "x": 0.5}}
@@ -43,6 +56,7 @@ labels = {
 # Alguns itens básicos foram alterados, como a representação
 # das "etiquetas" de ano, imigrantes e região.
 filtered_df = filter_columns(df, "year", "region", "fertility_rate")
+filter_fertility(filtered_df)
 
 rows = filtered_df.values.tolist() # type: ignore
 average: DefaultDict[str, int] = defaultdict(int)
@@ -59,14 +73,19 @@ for row in rows:
 for key, value in average.items():
     rows.append([key, "all", value / 6])
 
-changed_df = DataFrame(rows, columns=list(filtered_df.columns))
-chart = px.line( # type: ignore
-    changed_df,
-    x="year",
-    y="fertility_rate",
-    color="region",
-    labels=labels,
-    markers=True,
-)
 
-chart.update_layout(config) # type: ignore
+def create_chart(changed_df: DataFrame, labels: dict, config: dict = {}):
+    changed_df = DataFrame(rows, columns=list(filtered_df.columns))
+    chart = px.line( # type: ignore
+        changed_df,
+        x="year",
+        y="fertility_rate",
+        color="region",
+        labels=labels,
+        markers=True,
+    )
+    chart.update_layout(config) # type: ignore
+    return chart
+
+
+chart = create_chart(filtered_df, labels, config)
