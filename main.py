@@ -22,9 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import plotly.express as px # type: ignore
 from plotly.graph_objects import Figure # type: ignore
-from dash import Dash, dcc, html, ctx # type: ignore
+from dash import Dash, dcc, html # type: ignore
 from dash.dependencies import Input, Output # type: ignore
 
 from graphs import migration, population, fertility, average, urban_population
