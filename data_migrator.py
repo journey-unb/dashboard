@@ -24,7 +24,6 @@ SOFTWARE.
 
 import os
 import sqlite3
-from typing import List
 
 import pandas
 
@@ -85,7 +84,7 @@ def initialize_database() -> None:
         path = f"data/{file}"
         csv_df = pandas.read_csv(path, encoding=encoding) # type: ignore
 
-        rows: List[List[int | float]] = []
+        rows: list[list[int | float]] = []
 
         for row in csv_df.values.tolist(): # type: ignore
             # Alguns valores precisam ser tratados antes de serem inseridos
