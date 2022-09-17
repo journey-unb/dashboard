@@ -22,52 +22,45 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from typing import Any
+
 import plotly.express as px # type: ignore
+from plotly.graph_objects import Figure # type: ignore
 from pandas import DataFrame
 
 from data_migrator import df
-from utils import filter_columns, filter_values
+from utils import filter_values
 
-def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
-    hover_data = ["urban_population_percentage", "urban_population"]
-    chart = px.bar( # type: ignore
-        df,
-        x="region",
-        y="urban_population",
-        color="region",
-        animation_frame="year",
-        animation_group="region",
-        hover_data=hover_data,
-        labels=labels,
-    )
-
-    chart.update_layout(config)
-    chart.update_yaxes(range = [9_000_000, 2_400_000_000])
-    return chart
 
 # Aqui definimos as configurações de layout do gráfico.
 current_year: int = 2000
 config = {"title": {"text": f"População Urbana ({current_year})", "x": 0.5}}
 labels = {
-    "urban_population": "População Urbana",
-    "region": "Região",
     "year": "Ano",
+    "region": "Região",
+    "urban_population": "População Urbana",
     "urban_population_percentage": "% de população urbana",
 }
 
-# `animation_frame`: critério para animação.
-# `animatiou_group`: o que vai ser animado.
-# `hover_data`: informações que vão aparecer ao passar o mouse em cima 
-# das barras.
-filtered_columns = filter_columns(
-    df,
-    "urban_population",
-    "urban_population_percentage",
-    "year",
-    "region",
-)
 
+def create_chart(
+    df: DataFrame,
+    labels: dict[str, str] = labels,
+    config: dict[str, Any] = config,
+) -> Figure:
+    chart = px.bar( # type: ignore
+        df,
+        x="region",
+        y="urban_population",
+        color="region",
+        labels=labels,
+    )
+
+    chart.update_layout(config) # type: ignore
+    chart.update_yaxes(range=[9_000_000, 2_400_000_000]) # type: ignore
+    return chart
+
+
+# Aqui criamos o gráfico utilizando a função `create_chart`.
 filtered_df = filter_values(df, "year", current_year)
-
-# Aqui criamos o gráfico utilizando a função `create_chart`
-chart = create_chart(filtered_df, labels, config)
+chart = create_chart(filtered_df)

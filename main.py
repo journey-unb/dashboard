@@ -23,13 +23,13 @@ SOFTWARE.
 """
 
 from plotly.graph_objects import Figure # type: ignore
-from dash import Dash, dcc, html # type: ignore
+from dash import Dash, dcc, html, ctx # type: ignore
 from dash.dependencies import Input, Output # type: ignore
 
 from graphs import migration, population, fertility, average, urban_population
 
 from data_migrator import df
-from utils import filter_values
+from utils import filter_columns, filter_values
 
 
 app = Dash(__name__)
@@ -53,7 +53,17 @@ app.layout = html.Div(children=[
                 "placement": "bottom",
                 "always_visible": True,
             },
-        )
+        ),
+    ]),
+
+    # População Urbana
+    html.Div(children=[
+        dcc.Graph(
+            id="urban-population", # type: ignore
+            figure=urban_population.chart, # type: ignore
+        ),
+        html.Button("<",id="backward", n_clicks=0), # type: ignore
+        html.Button(">", id="forward", n_clicks=0), # type: ignore
     ]),
 ])
 
@@ -70,6 +80,32 @@ def update_migration_rate(value: list[int]) -> Figure: # type: ignore
     # Criamos e retornamos o gráfico com os novos valores.
     return migration.create_chart(new_df) # type: ignore
 
+
+@app.callback( # type: ignore
+    Output(component_id="urban-population", component_property="figure"),
+    Input(component_id="backward", component_property="n_clicks"),
+    Input(component_id="forward", component_property="n_clicks"),
+)
+def update_urban_population(
+    backward: int,
+    forward: int,
+) -> Figure: # type: ignore
+    # Definimos os valores para os botões `forward` e `backward`.
+    values: dict[str | None, int] = {"backward": -5, "forward": 5, None: 0}
+    triggered_id = ctx.triggered_id # type: ignore
+
+    current_year = urban_population.current_year
+    config = urban_population.config
+
+    if 1955 <= current_year + values[triggered_id] <= 2020: # type: ignore
+        urban_population.current_year += values[triggered_id] # type: ignore
+
+    title_text = f"População Urbana ({current_year})"
+    config["title"]["text"] = title_text
+    
+    filtered_df = filter_values(df, "year", current_year)
+    return urban_population.create_chart(filtered_df, config=config) # type: ignore
+    
 
 if __name__ == "__main__":
     app.run_server(debug=True) # type: ignore
