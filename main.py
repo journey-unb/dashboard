@@ -29,7 +29,7 @@ from dash.dependencies import Input, Output # type: ignore
 from graphs import migration, population, fertility, average, urban_population
 
 from data_migrator import df
-from utils import filter_values
+from utils import filter_values, filter_range
 
 
 app = Dash(__name__)
@@ -72,11 +72,24 @@ app.layout = html.Div(children=[
         dcc.RangeSlider(
             min=1955, # type: ignore
             max=2020, # type: ignore
-            id="fertility-rate-slider", # type: ignore
+            id="fertility-rate-year-slider", # type: ignore
             step=1, # type: ignore
             marks=None, # type: ignore
             pushable=True, # type: ignore
             value=[1955, 2020], # type: ignore
+            tooltip={ # type: ignore
+                "placement": "bottom",
+                "always_visible": True,
+            },
+        ),
+        dcc.RangeSlider(
+            min=1, # type: ignore
+            max=7, # type: ignore
+            id="fertility-rate-slider", # type: ignore
+            step=1, # type: ignore
+            marks=None, # type: ignore
+            pushable=True, # type: ignore
+            value=[1.43, 6.71], # type: ignore
             tooltip={ # type: ignore
                 "placement": "bottom",
                 "always_visible": True,
@@ -127,11 +140,22 @@ def update_urban_population(
 
 @app.callback( # type: ignore
     Output(component_id="fertility-rate", component_property="figure"),
+    Input(
+        component_id="fertility-rate-year-slider",
+        component_property="value",
+    ),
     Input(component_id="fertility-rate-slider", component_property="value"),
 )
-def update_fertility_rate(value: list[int]) -> Figure: # type: ignore
+def update_fertility_rate(
+    years_value: list[int],
+    rate_values: list[int],
+) -> Figure: # type: ignore
     # Filtramos o `DataFrame`` com os valores do intervalo escolhido.
-    new_df = filter_values(df, "year", *list(range(*value)))
+    new_df = filter_values(df, "year", *list(range(*years_value)))
+
+    # Agora filtramos o novo `DataFrame` com os valores do intervalo da
+    # taxa de fertilidade.
+    new_df = filter_range(df, "fertility_rate", rate_values)
 
     # Criamos e retornamos o gráfico com os novos valores.
     return fertility.create_chart(new_df) # type: ignore

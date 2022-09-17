@@ -69,10 +69,27 @@ def filter_values(df: DataFrame, column: str, *values: Any) -> DataFrame:
   
     return DataFrame(new_df, columns=columns)
 
-def filter_fertility(df: DataFrame):
-    fertility_value = filter_columns(df, "fertility_rate").values.tolist()
+
+def filter_range(df: DataFrame, column: str, values: list[int]) -> DataFrame:
+    min = values[0]
+    max = values[1]
+
+    rows = df.values.tolist() # type: ignore
+    columns: list[str] = list(df.columns)
+
+    index = columns.index(column)
+    new_df: list[list[int]] = []
+
+    for row in rows:
+        if min <= row[index] <= max:
+            new_df.append(row)
+
+    return DataFrame(new_df, columns=columns)
+
+
+# def filter_fertility(df: DataFrame):
+#     fertility_value = filter_columns(df, "fertility_rate").values.tolist()
             
-    maximum = max(fertility_value)
-    minimum = min(fertility_value)
-    print(maximum)
-    print(minimum)
+#     maximum = max(fertility_value)
+#     minimum = min(fertility_value)
+#     return maximum and minimum
