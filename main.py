@@ -29,7 +29,7 @@ from dash.dependencies import Input, Output # type: ignore
 from graphs import migration, population, fertility, average, urban_population
 
 from data_migrator import df
-from utils import filter_values, filter_range
+from utils import filter_columns, filter_values, filter_range
 
 
 app = Dash(__name__)
@@ -147,15 +147,13 @@ def update_urban_population(
     Input(component_id="fertility-rate-slider", component_property="value"),
 )
 def update_fertility_rate(
-    years_value: list[int],
+    years_values: list[int],
     rate_values: list[int],
 ) -> Figure: # type: ignore
-    # Filtramos o `DataFrame`` com os valores do intervalo escolhido.
-    new_df = filter_values(df, "year", *list(range(*years_value)))
-
-    # Agora filtramos o novo `DataFrame` com os valores do intervalo da
-    # taxa de fertilidade.
-    new_df = filter_range(df, "fertility_rate", rate_values)
+    # Filtramos o `DataFrame` com os valores do intervalo escolhido.
+    filtered_df = filter_columns(df, "year", "region", "fertility_rate")
+    new_df = filter_range(filtered_df, "year", years_values)
+    new_df = filter_range(new_df, "fertility_rate", rate_values)
 
     # Criamos e retornamos o gráfico com os novos valores.
     return fertility.create_chart(new_df) # type: ignore
