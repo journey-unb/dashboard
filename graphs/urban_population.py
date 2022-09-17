@@ -39,7 +39,6 @@ labels = {
     "year": "Ano",
     "region": "Região",
     "urban_population": "População Urbana",
-    "urban_population_percentage": "% de população urbana",
 }
 
 
