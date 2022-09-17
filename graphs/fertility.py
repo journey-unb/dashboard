@@ -23,15 +23,30 @@ SOFTWARE.
 """
 
 from collections import defaultdict
-from typing import DefaultDict
+from typing import DefaultDict, Any
 
 import plotly.express as px # type: ignore
+from plotly.graph_objects import Figure # type: ignore
 from pandas import DataFrame
 
 from data_migrator import df
 from utils import filter_columns, filter_fertility
 
-def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
+
+# Aqui definimos as configurações de layout do gráfico.
+config = {"title": {"text": "Taxa de Fertilidade (1955-2020)", "x": 0.5}}
+labels = {
+    "year": "Ano",
+    "fertility_rate": "Taxa de Fertilidade",
+    "region": "Região",
+}
+
+
+def create_chart(
+    df: DataFrame,
+    labels: dict[str, str] = labels,
+    config: dict[str, Any] = config,
+) -> Figure: # type: ignore
     chart = px.line( # type: ignore
         df,
         x="year",
@@ -41,16 +56,9 @@ def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] =
         markers=True,
     )
 
-    chart.update_layout(config)
+    chart.update_layout(config) # type: ignore
     return chart
 
-# Aqui definimos as configurações de layout do gráfico.
-config = {"title": {"text": "Taxa de Fertilidade (1955-2020)", "x": 0.5}}
-labels = {
-    "year": "Ano",
-    "fertility_rate": "Taxa de Fertilidade",
-    "region": "Região",
-}
 
 # A criação do gráfico utiliza o modo "linear" do Plotly.
 # Alguns itens básicos foram alterados, como a representação
@@ -74,18 +82,18 @@ for key, value in average.items():
     rows.append([key, "all", value / 6])
 
 
-def create_chart(changed_df: DataFrame, labels: dict, config: dict = {}):
-    changed_df = DataFrame(rows, columns=list(filtered_df.columns))
-    chart = px.line( # type: ignore
-        changed_df,
-        x="year",
-        y="fertility_rate",
-        color="region",
-        labels=labels,
-        markers=True,
-    )
-    chart.update_layout(config) # type: ignore
-    return chart
+# def create_chart(changed_df: DataFrame, labels: dict, config: dict = {}):
+#     changed_df = DataFrame(rows, columns=list(filtered_df.columns))
+#     chart = px.line( # type: ignore
+#         changed_df,
+#         x="year",
+#         y="fertility_rate",
+#         color="region",
+#         labels=labels,
+#         markers=True,
+#     )
+#     chart.update_layout(config) # type: ignore
+#     return chart
 
 
 chart = create_chart(filtered_df, labels, config)

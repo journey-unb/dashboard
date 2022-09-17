@@ -68,7 +68,20 @@ app.layout = html.Div(children=[
 
     # Taxa de Fertilidade
     html.Div(children=[
-        
+        dcc.Graph(id="fertility-rate", figure=fertility.chart), # type: ignore
+        dcc.RangeSlider(
+            min=1955, # type: ignore
+            max=2020, # type: ignore
+            id="fertility-rate-slider", # type: ignore
+            step=1, # type: ignore
+            marks=None, # type: ignore
+            pushable=True, # type: ignore
+            value=[1955, 2020], # type: ignore
+            tooltip={ # type: ignore
+                "placement": "bottom",
+                "always_visible": True,
+            },
+        ),
     ]),
 ])
 
@@ -79,7 +92,7 @@ app.layout = html.Div(children=[
     Input(component_id="migration-rate-slider", component_property="value"),
 )
 def update_migration_rate(value: list[int]) -> Figure: # type: ignore
-    # Filtramos o DataFrame com os valores do intervalo escolhido.
+    # Filtramos o `DataFrame` com os valores do intervalo escolhido.
     new_df = filter_values(df, "year", *list(range(*value)))
 
     # Criamos e retornamos o gráfico com os novos valores.
@@ -111,6 +124,18 @@ def update_urban_population(
     filtered_df = filter_values(df, "year", current_year)
     return urban_population.create_chart(filtered_df, config=config) # type: ignore
     
+
+@app.callback( # type: ignore
+    Output(component_id="fertility-rate", component_property="figure"),
+    Input(component_id="fertility-rate-slider", component_property="value"),
+)
+def update_fertility_rate(value: list[int]) -> Figure: # type: ignore
+    # Filtramos o `DataFrame`` com os valores do intervalo escolhido.
+    new_df = filter_values(df, "year", *list(range(*value)))
+
+    # Criamos e retornamos o gráfico com os novos valores.
+    return fertility.create_chart(new_df) # type: ignore
+
 
 if __name__ == "__main__":
     app.run_server(debug=True) # type: ignore
