@@ -85,11 +85,3 @@ def filter_range(df: DataFrame, column: str, values: list[int]) -> DataFrame:
             new_df.append(row)
 
     return DataFrame(new_df, columns=columns)
-
-
-# def filter_fertility(df: DataFrame):
-#     fertility_value = filter_columns(df, "fertility_rate").values.tolist()
-            
-#     maximum = max(fertility_value)
-#     minimum = min(fertility_value)
-#     return maximum and minimum
