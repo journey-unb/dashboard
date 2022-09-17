@@ -22,27 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from collections import defaultdict
-from typing import DefaultDict
+from typing import Any
 
 import plotly.express as px # type: ignore
+from plotly.graph_objects import Figure # type: ignore
 from pandas import DataFrame
 
 from data_migrator import df
-from utils import filter_columns, filter_fertility
+from utils import filter_columns
 
-def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
-    chart = px.line( # type: ignore
-        df,
-        x="year",
-        y="fertility_rate",
-        color="region",
-        labels=labels,
-        markers=True,
-    )
-
-    chart.update_layout(config)
-    return chart
 
 # Aqui definimos as configurações de layout do gráfico.
 config = {"title": {"text": "Taxa de Fertilidade (1955-2020)", "x": 0.5}}
@@ -52,40 +40,27 @@ labels = {
     "region": "Região",
 }
 
-# A criação do gráfico utiliza o modo "linear" do Plotly.
-# Alguns itens básicos foram alterados, como a representação
-# das "etiquetas" de ano, imigrantes e região.
-filtered_df = filter_columns(df, "year", "region", "fertility_rate")
-filter_fertility(filtered_df)
 
-rows = filtered_df.values.tolist() # type: ignore
-average: DefaultDict[str, int] = defaultdict(int)
-
-for row in rows:
-    # `row[0]` é garantidamente um ano e `row[2]` é garantidamente a
-    # taxa de fertilidade. `average` é um dicionário; então estamos
-    # fazendo basicamente, por exemplo: `row[2020] += 5.50`
-    average[row[0]] += row[2]
-
-# Agora adicionamos os itens da média no dicionário.
-# Dividimos o `value` por 6 para obter a média aritmética, já que
-# existem 6 regiões.
-for key, value in average.items():
-    rows.append([key, "all", value / 6])
-
-
-def create_chart(changed_df: DataFrame, labels: dict, config: dict = {}):
-    changed_df = DataFrame(rows, columns=list(filtered_df.columns))
+def create_chart(
+    df: DataFrame,
+    labels: dict[str, str] = labels,
+    config: dict[str, Any] = config,
+) -> Figure: # type: ignore
     chart = px.line( # type: ignore
-        changed_df,
+        df,
         x="year",
         y="fertility_rate",
         color="region",
         labels=labels,
         markers=True,
     )
+
     chart.update_layout(config) # type: ignore
     return chart
 
 
-chart = create_chart(filtered_df, labels, config)
+# A criação do gráfico utiliza o modo "linear" do Plotly.
+# Alguns itens básicos foram alterados, como a representação
+# das "etiquetas" de ano, imigrantes e região.
+filtered_df = filter_columns(df, "year", "region", "fertility_rate")
+chart = create_chart(filtered_df)

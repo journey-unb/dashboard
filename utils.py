@@ -69,14 +69,23 @@ def filter_values(df: DataFrame, column: str, *values: Any) -> DataFrame:
   
     return DataFrame(new_df, columns=columns)
 
-def filter_fertility(df: DataFrame):
-    fertility_value = filter_columns(df, "fertility_rate", "region", "year").values.tolist()
-    fertility_list_big = []
-    fertility_list_small = []
-    
-    for value in fertility_value:
-        if value[0] >= 2.2:
-            fertility_list_big.append(value)
-        else:
-            fertility_list_small.append(value)
-    #print(fertility_list_small)
+
+def filter_range(df: DataFrame, column: str, values: list[int]) -> DataFrame:
+    """
+    Esta função filtra as linhas do dataframe de acordo com um
+    intervalo.
+    """
+    min = values[0]
+    max = values[1]
+
+    rows = df.values.tolist() # type: ignore
+    columns: list[str] = list(df.columns)
+
+    index = columns.index(column)
+    new_df: list[list[int]] = []
+
+    for row in rows:
+        if min <= row[index] <= max:
+            new_df.append(row)
+
+    return DataFrame(new_df, columns=columns)
