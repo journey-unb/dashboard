@@ -65,6 +65,11 @@ app.layout = html.Div(children=[
         html.Button("<",id="backward", n_clicks=0), # type: ignore
         html.Button(">", id="forward", n_clicks=0), # type: ignore
     ]),
+
+    # Taxa de Fertilidade
+    html.Div(children=[
+        
+    ]),
 ])
 
 
