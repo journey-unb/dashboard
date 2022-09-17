@@ -71,6 +71,10 @@ def filter_values(df: DataFrame, column: str, *values: Any) -> DataFrame:
 
 
 def filter_range(df: DataFrame, column: str, values: list[int]) -> DataFrame:
+    """
+    Esta função filtra as linhas do dataframe de acordo com um
+    intervalo.
+    """
     min = values[0]
     max = values[1]
 
