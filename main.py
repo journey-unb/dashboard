@@ -29,7 +29,7 @@ from dash.dependencies import Input, Output # type: ignore
 from graphs import migration, population, fertility, average, urban_population
 
 from data_migrator import df
-from utils import filter_columns, filter_values
+from utils import filter_values
 
 
 app = Dash(__name__)
