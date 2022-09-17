@@ -70,13 +70,9 @@ def filter_values(df: DataFrame, column: str, *values: Any) -> DataFrame:
     return DataFrame(new_df, columns=columns)
 
 def filter_fertility(df: DataFrame):
-    fertility_value = filter_columns(df, "fertility_rate", "region", "year").values.tolist()
-    fertility_list_big = []
-    fertility_list_small = []
-    
-    for value in fertility_value:
-        if value[0] >= 2.2:
-            fertility_list_big.append(value)
-        else:
-            fertility_list_small.append(value)
-    #print(fertility_list_small)
+    fertility_value = filter_columns(df, "fertility_rate").values.tolist()
+            
+    maximum = max(fertility_value)
+    minimum = min(fertility_value)
+    print(maximum)
+    print(minimum)
