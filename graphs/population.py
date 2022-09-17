@@ -21,14 +21,27 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+from typing import Any
 
 import plotly.express as px # type: ignore
+from plotly.graph_objects import Figure # type: ignore
 from pandas import DataFrame
 
 from data_migrator import df
 from utils import filter_columns, filter_values
 
-def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
+# Aqui definimos as configurações de layout do gráfico.
+current_year: int = 2000
+config = {"title": { "text": f"Percentual populacional por continente de {current_year}", "x": 0.5}}
+labels = {"population": "População", "region": "Região", "year": "Ano"}
+
+
+def create_chart(
+    df: DataFrame,
+    labels: dict[str, str] = labels,
+    config: dict[str, Any] = config
+  ) -> Figure:
+
   chart = px.pie( # type: ignore
     df,
     values="population",
@@ -39,30 +52,8 @@ def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] =
   chart.update_layout(config)
   return chart
 
-# Aqui definimos as configurações de layout do gráfico.
-labels = {"population": "População", "region": "Região", "year": "Ano"}
-
-filtered_df = filter_columns(df, "year", "region", "population")
-valid_years: list[str | int] = []
-
-# Aqui inserimos, de maneira provisória, um sistema para escolha
-# dos anos a ser mostrado. Na próxima etapa do trabalho, utilizaremos
-# a função "Range Slider" do Dash.
-for year in input("Insira o ano desejado:").split():
-  if year.isnumeric():
-    valid_years.append(int(year))
-
-# Caso não insira um ano válido, será mostrado a população de todos os anos.
-# Caso contrário, utilizaremos o filtro de valores para mostrar os dados
-# do ano específico.
-if not valid_years:
-  filtered_year = filtered_df
-  valid_years.append("todos os anos")
-else:
-  filtered_year = filter_values(filtered_df, "year", *valid_years)
+filtered_columns = filter_columns(df, "year", "region", "population")
 
 # Aqui criamos o gráfico utilizando a função `create_chart`
-chart = create_chart(filtered_year, labels)
-
-# TODO: Utilizar títulos dinâmicos e seguir a PEP-8.
-chart.update_layout(title_text=f'Percentual populacional por continente de {", ".join([str(year) for year in valid_years])}', title_x=0.5) # type: ignore
+filtered_df = filter_values(filtered_columns, "year", current_year)
+chart = create_chart(filtered_df, labels)
