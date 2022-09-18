@@ -45,7 +45,7 @@ def create_chart(
     df: DataFrame,
     labels: dict[str, str] = labels,
     config: dict[str, Any] = config,
-) -> Figure: # type: ignore
+) -> Figure: 
     chart = px.line( # type: ignore
         df,
         x="year",
