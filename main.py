@@ -174,6 +174,7 @@ def update_fertility_rate(
     # Criamos e retornamos o gráfico com os novos valores.
     return fertility.create_chart(new_df) # type: ignore
 
+
 @app.callback( # type: ignore
     Output(component_id="population-percentage", component_property="figure"),
     Input(
