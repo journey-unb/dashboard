@@ -102,13 +102,13 @@ app.layout = html.Div(children=[
     # Percentual Populacional
     html.Div(children=[
         dcc.Graph(id="population-percentage", figure=population.chart), # type: ignore
-        daq.NumericInput(
+        daq.NumericInput( # type: ignore
+            min=1955, # type: ignore
+            max=2020, # type: ignore
             id="population-percentage-input", # type: ignore
             label="Alterar ano", # type: ignore
             labelPosition="top", # type: ignore
             size=80, # type: ignore
-            min=1955, # type: ignore
-            max=2020, # type: ignore
             value=population.current_year, # type: ignore
         )
     ])
@@ -174,22 +174,26 @@ def update_fertility_rate(
     # Criamos e retornamos o gráfico com os novos valores.
     return fertility.create_chart(new_df) # type: ignore
 
-@app.callback( #type: ignore
+@app.callback( # type: ignore
     Output(component_id="population-percentage", component_property="figure"),
-    Input(component_id="population-percentage-input", component_property="value")
+    Input(
+        component_id="population-percentage-input",
+        component_property="value",
+    ),
 )
 def update_population_percentage(value: int) -> Figure:
     population_df = population.filtered_columns
-    rows = population_df.values.tolist()
     config = population.config
+
+    rows = population_df.values.tolist() # type: ignore
 
     # Criamos uma lista com todos os anos disponíveis no DataFrame.
     years_list: list[int] = []
     
     for row in rows:
-        year: int = row[0]
+        row_year: int = row[0]
 
-        if not year in years_list:
+        if not row_year in years_list:
             years_list.append(row[0])
     
     # Verificamos se o ano escolhido pelo usuário é valido.
