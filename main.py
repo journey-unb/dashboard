@@ -25,13 +25,11 @@ SOFTWARE.
 from plotly.graph_objects import Figure # type: ignore
 from dash import Dash, dcc, html, ctx # type: ignore
 from dash.dependencies import Input, Output # type: ignore
-
 import dash_daq as daq # type: ignore
-
-from graphs import migration, population, fertility, average, urban_population
 
 from data_migrator import df
 from utils import filter_columns, filter_values, filter_range, closest_value
+from graphs import migration, population, fertility, average, urban_population
 
 
 app = Dash(__name__)
