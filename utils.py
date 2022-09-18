@@ -89,3 +89,11 @@ def filter_range(df: DataFrame, column: str, values: list[int]) -> DataFrame:
             new_df.append(row)
 
     return DataFrame(new_df, columns=columns)
+
+def closest_value(values: list[int], number: int) -> int:
+  aux: list[int] = []
+
+  for value in values:
+    aux.append(abs(number - value))
+    
+  return values[aux.index(min(aux))]

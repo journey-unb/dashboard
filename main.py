@@ -26,10 +26,12 @@ from plotly.graph_objects import Figure # type: ignore
 from dash import Dash, dcc, html, ctx # type: ignore
 from dash.dependencies import Input, Output # type: ignore
 
+import dash_daq as daq # type: ignore
+
 from graphs import migration, population, fertility, average, urban_population
 
 from data_migrator import df
-from utils import filter_columns, filter_values, filter_range
+from utils import filter_columns, filter_values, filter_range, closest_value
 
 
 app = Dash(__name__)
@@ -96,6 +98,20 @@ app.layout = html.Div(children=[
             },
         ),
     ]),
+
+    # Percentual Populacional
+    html.Div(children=[
+        dcc.Graph(id="population-percentage", figure=population.chart), # type: ignore
+        daq.NumericInput(
+            id="population-percentage-input", # type: ignore
+            label="Alterar ano", # type: ignore
+            labelPosition="top", # type: ignore
+            size=80, # type: ignore
+            min=1955, # type: ignore
+            max=2020, # type: ignore
+            value=population.current_year, # type: ignore
+        )
+    ])
 ])
 
 
@@ -157,6 +173,38 @@ def update_fertility_rate(
 
     # Criamos e retornamos o gráfico com os novos valores.
     return fertility.create_chart(new_df) # type: ignore
+
+@app.callback( #type: ignore
+    Output(component_id="population-percentage", component_property="figure"),
+    Input(component_id="population-percentage-input", component_property="value")
+)
+def update_population_percentage(value: int) -> Figure:
+    population_df = population.filtered_columns
+    rows = population_df.values.tolist()
+    config = population.config
+
+    # Criamos uma lista com todos os anos disponíveis no DataFrame.
+    years_list: list[int] = []
+    
+    for row in rows:
+        year: int = row[0]
+
+        if not year in years_list:
+            years_list.append(row[0])
+    
+    # Verificamos se o ano escolhido pelo usuário é valido.
+    # Caso não esteja na lista `years_list`, retornará o ano mais próximo.
+    year: int = closest_value(years_list, value)
+
+    # Filtramos o DataFrame para o ano escolhido.
+    new_df = filter_values(population_df, "year", year)
+
+    # Atualizamos o parâmetro `ano` para as configurações do gráfico.
+    title_text = f"Percentual populacional por continente de {year}"
+    config["title"]["text"] = title_text
+
+    # Retornamos o gráfico com os novos valores.
+    return population.create_chart(new_df)
 
 
 if __name__ == "__main__":
