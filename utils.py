@@ -101,3 +101,23 @@ def closest_value(values: list[int], number: int) -> int:
         aux.append(abs(number - value))
 
     return values[aux.index(min(aux))]
+
+
+def get_all_values(df: DataFrame, column: str) -> list[Any]:
+    """
+    Esta função retorna os valores de uma coluna específica
+    em forma de lista.
+    """
+    rows = df.values.tolist() # type: ignore
+    columns: list[str] = list(df.columns)
+
+    index = columns.index(column)
+    values: list[Any] = []
+
+    for row in rows:
+        column_row = row[index]
+
+        if not column_row in values:
+            values.append(column_row)
+    
+    return values
