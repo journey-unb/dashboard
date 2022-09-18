@@ -111,6 +111,12 @@ app.layout = html.Div(children=[
             size=80, # type: ignore
             value=population.current_year, # type: ignore
         )
+    ]),
+
+    # Média de Idades
+    html.Div(children=[
+        dcc.Graph(id="age-average", figure=average.chart),
+
     ])
 ])
 
