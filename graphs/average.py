@@ -22,13 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from typing import Any
+
 import plotly.express as px # type: ignore
+from plotly.graph_objects import Figure # type: ignore
 from pandas import DataFrame
 
 from data_migrator import df
 from utils import filter_columns
 
-def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] = {}): # type: ignore
+# Aqui definimos as configurações de layout do gráfico.
+config = {"title": {"text": "Média de Idades (1955-2020)", "x": 0.5}}
+labels = {"median_age": "Média das idades", "region": "Região", "year": "Ano"}
+
+def create_chart(
+    df: DataFrame,
+    labels: dict[str, str] = labels,
+    config: dict[str, Any] = config
+) -> Figure:
     chart = px.area( # type: ignore
         filtered_df,
         facet_col="region",
@@ -40,12 +51,8 @@ def create_chart(df: DataFrame, labels: dict[str, str], config: dict[str, str] =
         markers=True,
     )
 
-    chart.update_layout(config)
+    chart.update_layout(config) # type: ignore
     return chart
-
-# Aqui definimos as configurações de layout do gráfico.
-config = {"title": {"text": "Média de Idades (1955-2020)", "x": 0.5}}
-labels = {"median_age": "Média das idades", "region": "Região", "year": "Ano"}
 
 # `facet_col`: informação que vai aparecer em cada coluna.
 # `facet_col_wrap`: quantas colunas vão aparecer por linha.
