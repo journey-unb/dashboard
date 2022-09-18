@@ -28,7 +28,8 @@ from dash.dependencies import Input, Output # type: ignore
 import dash_daq as daq # type: ignore
 
 from data_migrator import df
-from utils import filter_columns, filter_values, filter_range, closest_value
+
+from utils import filter_columns, filter_values, filter_range, closest_value, get_all_values
 from graphs import migration, population, fertility, average, urban_population
 
 
@@ -108,6 +109,18 @@ app.layout = html.Div(children=[
             labelPosition="top", # type: ignore
             size=80, # type: ignore
             value=population.current_year, # type: ignore
+        )
+    ]),
+
+    # Média de Idades
+    html.Div(children=[
+        dcc.Graph(id="age-average", figure=average.chart), # type: ignore
+        dcc.Dropdown( # type: ignore
+            id="age-average-dropdown", # type: ignore
+            placeholder="Atualizando região...",
+            options=average.current_regions, # type: ignore
+            value=average.current_regions, # type: ignore
+            multi=True # type: ignore
         )
     ])
 ])
@@ -209,6 +222,26 @@ def update_population_percentage(value: int) -> Figure:
     # Retornamos o gráfico com os novos valores.
     return population.create_chart(new_df)
 
+
+@app.callback( # type: ignore
+    Output(component_id="age-average", component_property="figure"),
+    Output(component_id="age-average-dropdown", component_property="value"),
+    Input(component_id="age-average-dropdown", component_property="value")
+)
+def update_age_average(value: list[str]) -> tuple[Figure, list[str]]:
+    # É necessário ter ao menos uma região para mostrar o gráfico.
+    # Então, caso `value` for vazio, retornamos o valor para a região
+    # escolhida anteriormente.
+    if len(value) > 0:
+        average.current_regions = value
+    
+    # Filtramos o DataFrame para a região escolhida.
+    new_df = filter_values(average.filtered_df, "region", *average.current_regions)
+
+    # Retornamos o gráfico com os novos valores e, junto com ele,
+    # retornamos também o valor das regiões escolhidas para caso
+    # `value` for vazio.
+    return average.create_chart(new_df), average.current_regions
 
 if __name__ == "__main__":
     app.run_server(debug=True) # type: ignore
