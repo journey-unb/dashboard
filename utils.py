@@ -90,10 +90,14 @@ def filter_range(df: DataFrame, column: str, values: list[int]) -> DataFrame:
 
     return DataFrame(new_df, columns=columns)
 
-def closest_value(values: list[int], number: int) -> int:
-  aux: list[int] = []
 
-  for value in values:
-    aux.append(abs(number - value))
-    
-  return values[aux.index(min(aux))]
+def closest_value(values: list[int], number: int) -> int:
+    """
+    Esta função retorna o valor mais próximo de um número.
+    """
+    aux: list[int] = []
+
+    for value in values:
+        aux.append(abs(number - value))
+
+    return values[aux.index(min(aux))]

@@ -30,9 +30,15 @@ from pandas import DataFrame
 from data_migrator import df
 from utils import filter_columns, filter_values
 
+
 # Aqui definimos as configurações de layout do gráfico.
-current_year: int = 2000
-config = {"title": { "text": f"Percentual populacional por continente de {current_year}", "x": 0.5}}
+current_year = 2000
+config = {
+    "title": {
+        "text": f"Percentual populacional por continente de {current_year}",
+        "x": 0.5,
+    }
+}
 labels = {"population": "População", "region": "Região", "year": "Ano"}
 
 
@@ -40,20 +46,19 @@ def create_chart(
     df: DataFrame,
     labels: dict[str, str] = labels,
     config: dict[str, Any] = config
-  ) -> Figure:
+) -> Figure:
+    chart = px.pie( # type: ignore
+        df,
+        values="population",
+        names="region",
+        labels=labels,
+    )
 
-  chart = px.pie( # type: ignore
-    df,
-    values="population",
-    names="region",
-    labels=labels,
-  )
+    chart.update_layout(config) # type: ignore
+    return chart
 
-  chart.update_layout(config)
-  return chart
-
-filtered_columns = filter_columns(df, "year", "region", "population")
 
 # Aqui criamos o gráfico utilizando a função `create_chart`
+filtered_columns = filter_columns(df, "year", "region", "population")
 filtered_df = filter_values(filtered_columns, "year", current_year)
 chart = create_chart(filtered_df, labels)

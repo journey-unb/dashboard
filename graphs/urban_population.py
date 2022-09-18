@@ -33,7 +33,7 @@ from utils import filter_values
 
 
 # Aqui definimos as configurações de layout do gráfico.
-current_year: int = 2000
+current_year = 2000
 config = {"title": {"text": f"População Urbana ({current_year})", "x": 0.5}}
 labels = {
     "year": "Ano",
