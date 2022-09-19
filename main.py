@@ -29,7 +29,12 @@ import dash_daq as daq # type: ignore
 
 from data_migrator import df
 
-from utils import filter_columns, filter_values, filter_range, closest_value, get_all_values
+from utils import (
+    filter_columns,
+    filter_values,
+    filter_range,
+    closest_value,
+)
 from graphs import migration, population, fertility, average, urban_population
 
 
@@ -117,7 +122,7 @@ app.layout = html.Div(children=[
         dcc.Graph(id="age-average", figure=average.chart), # type: ignore
         dcc.Dropdown( # type: ignore
             id="age-average-dropdown", # type: ignore
-            placeholder="Atualizando região...",
+            placeholder="Atualizando região...", # type: ignore
             options=average.current_regions, # type: ignore
             value=average.current_regions, # type: ignore
             multi=True # type: ignore
