@@ -42,7 +42,10 @@ app = Dash(__name__)
 
 # Layout
 app.layout = html.Div(children=[
-    html.H1(children="População em Nível Continental"),
+    html.H1( 
+        children="População em Nível Continental", # type: ignore
+        style={'textAlign': 'center'} # type: ignore
+    ), 
 
     # Taxa de Migração
     html.Div(children=[
